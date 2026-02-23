@@ -1,0 +1,22 @@
+# --- R específicos ---
+.Rhistory
+.RData
+.Ruserdata
+.Rapp.history
+
+# Archivos temporales de RStudio (muy molestos en los commits)
+.Rproj.user/
+
+# --- renv (Gestión de entornos) ---
+# Ignoramos la librería local porque es pesada y se puede reconstruir con renv::restore()
+renv/library/
+renv/python/
+renv/staging/
+renv/cpp/
+
+Conference-template-letter.doc
+
+.DS_Store
+*~
+*.swp
+.Trash-*
