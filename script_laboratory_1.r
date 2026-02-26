@@ -1,10 +1,20 @@
 install.packages("corrplot")
 install.packages("Hmisc")
+install.packages("naniar")
+install.packages("tidyverse")
+install.packages("mice")
+
 
 library(openxlsx)
 library(corrplot)
 library(ggplot2)
 library(Hmisc)
+library(naniar)
+library(tidyverse)
+library(mice)
+
+
+
 
 setwd("C:/RecursosEstadistica2/laboratory_I-EAPII")
 
@@ -84,5 +94,78 @@ df_data_historica$horas_sueno[df_data_historica$horas_sueno< 0] <- NA
 df_data_historica$uso_redes[df_data_historica$uso_redes< 0] <- NA
 df_data_historica$ingresos_familiares[df_data_historica$ingresos_familiares < 0] <- NA
 
+
+#Analisis de datos faltantes
+
+miss_var_summary(df_data_historica)
+#grafico de datos faltantes
+gg_miss_var(df_data_historica, show_pct = TRUE)
+
+#grafico de datos faltantes por caracteristica
+vis_miss(df_data_historica)
+
+#grfico para observar datos 
+gg_miss_upset(df_data_historica)
+
+#imputacion de datos con el metodo de imputacion multivariada por ecuaciones concatenadas con pmm para
+# datos numericos 
+
+
+#convertimos la caracteristica carrera a factor 
+df_data_historica$carrera <- as.factor(df_data_historica$carrera)
+str(df_data_historica$carrera)
+
+metodos <- make.method(df_data_historica)
+
+metodos[c("horas_sueno",
+          "uso_redes",
+          "promedio_previo",
+          "estres",
+          "asistencia",
+          "horas_estudio")] <- "pmm"
+
+metodos["carrera"]<- "polyreg"
+
+
+impData <- mice(df_data_historica,
+                method =  metodos,
+                m = 5,
+                maxit = 50,
+                seed = 500)
+
+
+
+plot(impDta)
+
+#modelo de regresion multiple
+modelo <- with(impData,
+               lm(puntaje_final ~ 
+                    horas_estudio +
+                    asistencia +
+                    promedio_previo +
+                    estres +
+                    uso_redes +
+                    horas_sueno +
+                    edad +
+                    ingresos_familiares +
+                    genero +
+                    carrera +
+                    modalidad))
+
+summary(pool(modelo))
+
+#Modelo solo con las variables significativas
+
+modelo_reducido <- with(impData,
+                        lm(puntaje_final ~ 
+                             horas_estudio +
+                             asistencia +
+                             promedio_previo +
+                             estres +
+                             uso_redes +
+                             carrera +
+                             modalidad))
+
+summary(pool(modelo_reducido))
 
 
