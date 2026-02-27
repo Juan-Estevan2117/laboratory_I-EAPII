@@ -32,8 +32,22 @@ df_data_historica$carrera[df_data_historica$carrera == "data"]<-"datos"
 
 #poner en Nan los numeros que estan fuera de rango para los datos fuera de rango de asistencia 
 
-minimo <- 0
-maximo <- 100
+minimoAsistencia <- 0
+maximoAsistencia <- 100
 
 df_data_historica$asistencia[df_data_historica$asistencia< minimo 
                       | df_data_historica$asistencia > maximo] <- NA
+
+
+
+#poner en Nan los numeros que estan fuera de rango 24 horas al dia para la caracteristica uso de redes
+
+minimoRedes <- 0
+maximoRedes <- 24
+
+df_data_historica$uso_redes[df_data_historica$uso_redes< minimo
+                            |df_data_historica$uso_redes > maximo] <- NA 
+
+
+
+
