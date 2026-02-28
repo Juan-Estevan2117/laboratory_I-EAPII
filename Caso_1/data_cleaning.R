@@ -39,7 +39,7 @@ df_data_historica$carrera[df_data_historica$carrera == "cs"]<- "ciencias de la C
 df_data_historica$genero[df_data_historica$genero == "female"] <- "mujer"
 df_data_historica$genero[df_data_historica$genero == "male"] <- "hombre"
 df_data_historica$carrera[df_data_historica$carrera == "data"]<-"datos" 
-
+df_data_historica$trabaja[df_data_historica$trabaja == "sí"] <- "si"
 #poner en Nan los numeros que estan fuera de rango para los datos fuera de rango de asistencia 
 
 
